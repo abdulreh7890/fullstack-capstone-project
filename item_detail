@@ -1,0 +1,2 @@
+curl --request GET --url http://localhost:3060/api/gifts/424
+{"_id":"6aafd1862c0ac78a79a4c35c","id":"424","name":"Dining Table","category":"Kitchen","condition":"New","posted_by":"23789","zipcode":"94102","date_added":1684195200,"age_days":800,"age_years":2.19,"description":"This dining table has been the centerpiece of many family gatherings...","image":"/images/dining-table.jpeg"}
