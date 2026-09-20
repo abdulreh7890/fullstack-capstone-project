@@ -1,32 +1,112 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { urlConfig } from '../../config';
+import { useAppContext } from '../../context/AuthContext';
 import './RegisterPage.css';
 
 function RegisterPage() {
-
-    // State variables
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    // Handle Register button
+    // Error message state
+    const [showerr, setShowerr] = useState('');
+
+    const navigate = useNavigate();
+    const { setIsLoggedIn } = useAppContext();
+
     const handleRegister = async () => {
-        console.log("Register invoked");
+        try {
+            const response = await fetch(
+                `${urlConfig.backendUrl}/api/auth/register`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: email,
+                        password: password
+                    })
+                }
+            );
+
+            // Task 1: Access data coming from backend
+            const json = await response.json();
+
+            // Task 2: Set user details in session storage
+            if (json.authtoken) {
+                sessionStorage.setItem(
+                    'auth-token',
+                    json.authtoken
+                );
+
+                sessionStorage.setItem(
+                    'name',
+                    firstName
+                );
+
+                sessionStorage.setItem(
+                    'email',
+                    json.email
+                );
+
+                // Task 3: Set logged-in state
+                setIsLoggedIn(true);
+
+                // Clear any previous error
+                setShowerr('');
+
+                // Task 4: Navigate to MainPage
+                navigate('/app');
+            }
+
+            // Task 5: Handle registration error
+            if (json.error) {
+                setShowerr(json.error);
+            } else if (!json.authtoken) {
+                setShowerr(
+                    json.message || 'Registration failed'
+                );
+            }
+
+        } catch (e) {
+            console.log(
+                "Error fetching details: " + e.message
+            );
+
+            setShowerr(
+                'Unable to register. Please try again.'
+            );
+        }
     };
 
     return (
         <div className="container mt-5">
             <div className="row justify-content-center">
                 <div className="col-md-6 col-lg-4">
+
                     <div className="register-card p-4 border rounded">
 
                         <h2 className="text-center mb-4 font-weight-bold">
                             Register
                         </h2>
 
-                        {/* First Name */}
+                        {/* Task 6: Display registration error */}
+                        {showerr && (
+                            <div className="text-danger mb-3">
+                                {showerr}
+                            </div>
+                        )}
+
                         <div className="mb-4">
-                            <label htmlFor="firstName" className="form-label">
+                            <label
+                                htmlFor="firstName"
+                                className="form-label"
+                            >
                                 FirstName
                             </label>
 
@@ -36,13 +116,17 @@ function RegisterPage() {
                                 className="form-control"
                                 placeholder="Enter your firstName"
                                 value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
+                                onChange={(e) =>
+                                    setFirstName(e.target.value)
+                                }
                             />
                         </div>
 
-                        {/* Last Name */}
                         <div className="mb-4">
-                            <label htmlFor="lastName" className="form-label">
+                            <label
+                                htmlFor="lastName"
+                                className="form-label"
+                            >
                                 LastName
                             </label>
 
@@ -52,13 +136,17 @@ function RegisterPage() {
                                 className="form-control"
                                 placeholder="Enter your lastName"
                                 value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
+                                onChange={(e) =>
+                                    setLastName(e.target.value)
+                                }
                             />
                         </div>
 
-                        {/* Email */}
                         <div className="mb-4">
-                            <label htmlFor="email" className="form-label">
+                            <label
+                                htmlFor="email"
+                                className="form-label"
+                            >
                                 Email
                             </label>
 
@@ -68,13 +156,17 @@ function RegisterPage() {
                                 className="form-control"
                                 placeholder="Enter your email"
                                 value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                onChange={(e) =>
+                                    setEmail(e.target.value)
+                                }
                             />
                         </div>
 
-                        {/* Password */}
                         <div className="mb-4">
-                            <label htmlFor="password" className="form-label">
+                            <label
+                                htmlFor="password"
+                                className="form-label"
+                            >
                                 Password
                             </label>
 
@@ -84,11 +176,12 @@ function RegisterPage() {
                                 className="form-control"
                                 placeholder="Enter your password"
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={(e) =>
+                                    setPassword(e.target.value)
+                                }
                             />
                         </div>
 
-                        {/* Register Button */}
                         <button
                             type="button"
                             className="btn btn-primary w-100"
@@ -99,7 +192,10 @@ function RegisterPage() {
 
                         <p className="mt-4 text-center">
                             Already a member?{' '}
-                            <a href="/app/login" className="text-primary">
+                            <a
+                                href="/app/login"
+                                className="text-primary"
+                            >
                                 Login
                             </a>
                         </p>
