@@ -7,6 +7,7 @@ import RegisterPage from './components/RegisterPage/RegisterPage';
 import DetailsPage from './components/DetailsPage/DetailsPage';
 import SearchPage from './components/SearchPage/SearchPage';
 import Navbar from './components/Navbar/Navbar';
+import Profile from './components/Profile/Profile';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -22,7 +23,10 @@ function App() {
                 <Route path="/app/login" element={<LoginPage />} />
                 <Route path="/app/register" element={<RegisterPage />} />
                 <Route path="/details/:productId" element={<DetailsPage />} />
-
+<Route
+    path="/app/profile"
+    element={<Profile />}
+/>
                 {/* Search Page */}
                 <Route path="/app/search" element={<SearchPage />} />
             </Routes>

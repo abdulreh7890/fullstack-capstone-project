@@ -152,6 +152,45 @@ router.post('/login', async (req, res) => {
     }
 });
 
+// Get user profile
+router.get('/update', async (req, res) => {
+    try {
+        const email = req.headers.email;
+
+        if (!email) {
+            return res.status(400).json({
+                error: 'Email is required in the header'
+            });
+        }
+
+        const db = await connectToDatabase();
+        const collection = db.collection('users');
+
+        const existingUser = await collection.findOne({
+            email: email
+        });
+
+        if (!existingUser) {
+            return res.status(404).json({
+                error: 'User not found'
+            });
+        }
+
+        return res.json({
+            firstName: existingUser.firstName,
+            lastName: existingUser.lastName,
+            email: existingUser.email
+        });
+
+    } catch (e) {
+        logger.error(e);
+
+        return res.status(500).json({
+            error: 'Internal server error'
+        });
+    }
+});
+
 // Update user profile
 router.put(
     '/update',
