@@ -1,26 +1,115 @@
-/* Task 1: Style the search input field */
+/* Overall Search Page */
+.search-page {
+    padding: 2rem 0;
+}
+
+/* Filter Section */
+.filter-section {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+/* Task 1: Search input */
 .search-input {
-    /* Insert specific CSS properties here */
+    width: 75%;
+    margin-right: 1rem;
 }
 
-/* Task 2: Style the search button */
+/* Task 2: Search button */
 .search-button {
-    /* Insert specific CSS properties here */
+    width: 20%;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
 }
 
-/* Task 3: Customize dropdown filters */
-.dropdown-filter {
-    /* Insert specific CSS properties here */
+.search-button:hover {
+    background-color: #0056b3;
+    color: #ffffff;
 }
 
-/* Task 4: Style the age range slider */
-.age-range-slider {
-    /* Insert specific CSS properties here */
+/* Task 3: Dropdown filters */
+.filter-section select {
+    margin-bottom: 1rem;
+    border: 1px solid #ced4da;
 }
 
-/* Task 5: Enhance search results cards appearance */
-.search-results-card {
-    /* Insert specific CSS properties here */
+/* Task 4: Age range slider */
+.filter-section input[type="range"] {
+    width: 100%;
 }
 
-/* Additional placeholders for tasks 6 to 10 */
+/* Search input/button container */
+.search-controls {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Task 5: Search result cards */
+.search-results .card {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+/* Task 7: Card hover effect */
+.search-results .card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Task 8: Result images */
+.search-results .card-img-top {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Result card content */
+.search-results .card-body {
+    padding: 1rem;
+}
+
+.search-results .card-title {
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+/* Task 6: No products found */
+.no-products-alert {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 0.75rem 1.25rem;
+    margin-top: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+}
+
+/* Task 9: Responsive layout */
+@media (max-width: 768px) {
+    .search-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-input {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+
+    .search-button {
+        width: 100%;
+    }
+
+    .search-results .card-img-top {
+        height: 180px;
+    }
+
+    .search-results .card-title {
+        font-size: 1.1rem;
+    }
+}

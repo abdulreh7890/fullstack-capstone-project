@@ -7,6 +7,7 @@ export default function Navbar() {
 
             <div className="navbar-collapse" id="navbarNav">
                 <ul className="navbar-nav">
+
                     <li className="nav-item">
                         <a className="nav-link" href="/home.html">
                             Home
@@ -18,6 +19,13 @@ export default function Navbar() {
                             Gifts
                         </a>
                     </li>
+
+                    <li className="nav-item">
+                        <a className="nav-link" href="/app/search">
+                            Search
+                        </a>
+                    </li>
+
                 </ul>
             </div>
         </nav>
