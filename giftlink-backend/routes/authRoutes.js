@@ -152,4 +152,105 @@ router.post('/login', async (req, res) => {
     }
 });
 
+// Update user profile
+router.put(
+    '/update',
+
+    // Task 1: Input validation
+    [
+        body('firstName')
+            .optional()
+            .notEmpty()
+            .withMessage('First name cannot be empty'),
+
+        body('lastName')
+            .optional()
+            .notEmpty()
+            .withMessage('Last name cannot be empty')
+    ],
+
+    async (req, res) => {
+
+        // Task 2: Validate input
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                errors: errors.array()
+            });
+        }
+
+        try {
+            // Task 3: Check email in request header
+            const email = req.headers.email;
+
+            if (!email) {
+                return res.status(400).json({
+                    error: 'Email is required in the header'
+                });
+            }
+
+            // Task 4: Connect to MongoDB and users collection
+            const db = await connectToDatabase();
+            const collection = db.collection('users');
+
+            // Task 5: Find existing user
+            const existingUser = await collection.findOne({
+                email: email
+            });
+
+            if (!existingUser) {
+                return res.status(404).json({
+                    error: 'User not found'
+                });
+            }
+
+            // Update only fields supplied by frontend
+            if (req.body.firstName !== undefined) {
+                existingUser.firstName = req.body.firstName;
+            }
+
+            if (req.body.lastName !== undefined) {
+                existingUser.lastName = req.body.lastName;
+            }
+
+            existingUser.updatedAt = new Date();
+
+            // Task 6: Update user in database
+            await collection.updateOne(
+                { _id: existingUser._id },
+                {
+                    $set: {
+                        firstName: existingUser.firstName,
+                        lastName: existingUser.lastName,
+                        updatedAt: existingUser.updatedAt
+                    }
+                }
+            );
+
+            // Task 7: Create JWT authentication
+            const payload = {
+                user: {
+                    id: existingUser._id.toString()
+                }
+            };
+
+            const authtoken = jwt.sign(
+                payload,
+                JWT_SECRET
+            );
+
+            return res.json({
+                authtoken
+            });
+
+        } catch (e) {
+            logger.error(e);
+            return res.status(500).send(
+                'Internal server error'
+            );
+        }
+    }
+);
+
 module.exports = router;
