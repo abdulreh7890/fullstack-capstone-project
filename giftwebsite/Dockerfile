@@ -8,6 +8,6 @@ RUN npm ci --omit=dev
 
 COPY . .
 
-EXPOSE 3060
+EXPOSE 9000
 
-CMD ["node", "app.js"]
+CMD ["node", "index.js"]
